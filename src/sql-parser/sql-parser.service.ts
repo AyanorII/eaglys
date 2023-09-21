@@ -9,7 +9,7 @@ export class SqlParserService {
 		this.parser = new Parser();
 	}
 
-	extractColumns(query: string) {
+	extractColumns(query: string): string[] {
 		if (!query.trim())
 			throw new BadRequestException("Please provide a SQL query.");
 
@@ -20,7 +20,9 @@ export class SqlParserService {
 				column.split("::").at(-1)
 			);
 
-			return columns;
+			const uniqueColumns = [...new Set(columns)];
+
+			return uniqueColumns;
 		} catch (error) {
 			throw new BadRequestException("Please provide a valid SQL query.");
 		}

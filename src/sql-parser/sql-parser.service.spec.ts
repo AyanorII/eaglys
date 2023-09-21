@@ -28,17 +28,30 @@ describe("SqlParserService", () => {
 		});
 
 		it("should extract columns from a complex query", () => {
-			const selectQuery = "SELECT a, b FROM test WHERE a = 5;";
-			const deleteQuery = "DELETE FROM test WHERE a = 5;";
-			const query = `${selectQuery} ${deleteQuery}`;
+			const query = `
+      SELECT a.id, a.name, SUM(b.amount) as TotalAmount, COUNT(c.id) as CountOfOrders
+      FROM users a
+      LEFT JOIN transactions b ON a.id = b.user_id
+      INNER JOIN orders c ON a.id = c.user_id
+      WHERE a.active = 1 AND (b.date BETWEEN '2021-01-01' AND '2021-12-31' OR b.date IS NULL)
+      GROUP BY a.id, a.name
+      HAVING SUM(b.amount) >= 1000 OR COUNT(c.id) > 10
+      ORDER BY TotalAmount DESC, CountOfOrders ASC
+      LIMIT 10;
+      `;
+			const queryColumns = [
+				"id",
+				"name",
+				"amount",
+				"user_id",
+				"active",
+				"date",
+				"TotalAmount",
+				"CountOfOrders",
+			];
+			const extractedColumns = service.extractColumns(query);
 
-			const columns = service.extractColumns(query);
-
-			expect(Array.isArray(columns)).toBe(true);
-			expect(columns.length).toBe(3);
-			expect(columns[0]).toBe("a");
-			expect(columns[1]).toBe("b");
-			expect(columns[2]).toBe("(.*)");
+			expect(extractedColumns).toEqual(queryColumns);
 		});
 	});
 });
