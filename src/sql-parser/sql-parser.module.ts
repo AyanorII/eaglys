@@ -1,0 +1,10 @@
+import { Module } from "@nestjs/common";
+
+import { SqlParserController } from "./sql-parser.controller";
+import { SqlParserService } from "./sql-parser.service";
+
+@Module({
+	controllers: [SqlParserController],
+	providers: [SqlParserService],
+})
+export class SqlParserModule {}
