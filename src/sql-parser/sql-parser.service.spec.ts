@@ -1,5 +1,6 @@
 import { Test, TestingModule } from "@nestjs/testing";
 
+import { HashService } from "../hash/hash.service";
 import { SqlParserService } from "./sql-parser.service";
 
 describe("SqlParserService", () => {
@@ -7,7 +8,7 @@ describe("SqlParserService", () => {
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
-			providers: [SqlParserService],
+			providers: [SqlParserService, HashService],
 		}).compile();
 
 		service = module.get<SqlParserService>(SqlParserService);
@@ -52,6 +53,18 @@ describe("SqlParserService", () => {
 			const extractedColumns = service.extractColumns(query);
 
 			expect(extractedColumns).toEqual(queryColumns);
+		});
+	});
+
+	describe("#hashColumns", () => {
+		it("should hash a list of columns", async () => {
+			const columns = ["id", "name", "birthday"];
+			const columnsMap = await service.hashColumns(columns);
+
+			columns.forEach((column) => {
+				expect(columnsMap).toHaveProperty(column);
+				expect(columnsMap[column]).not.toBe(column);
+			});
 		});
 	});
 });

@@ -1,5 +1,6 @@
 import { Test, TestingModule } from "@nestjs/testing";
 
+import { HashService } from "../hash/hash.service";
 import { SqlParserController } from "./sql-parser.controller";
 import { SqlParserService } from "./sql-parser.service";
 
@@ -9,7 +10,7 @@ describe("SqlParserController", () => {
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
 			controllers: [SqlParserController],
-			providers: [SqlParserService],
+			providers: [SqlParserService, HashService],
 		}).compile();
 
 		controller = module.get<SqlParserController>(SqlParserController);

@@ -1,11 +1,13 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { Parser } from "node-sql-parser";
 
+import { HashService } from "../hash/hash.service";
+
 @Injectable()
 export class SqlParserService {
 	private parser: Parser;
 
-	constructor() {
+	constructor(private readonly hashService: HashService) {
 		this.parser = new Parser();
 	}
 
@@ -26,5 +28,16 @@ export class SqlParserService {
 		} catch (error) {
 			throw new BadRequestException("Please provide a valid SQL query.");
 		}
+	}
+
+	async hashColumns(columns: string[]) {
+		const map = {};
+
+		for (const column of columns) {
+			const hash = await this.hashService.hash(column);
+			map[column] = hash;
+		}
+
+		return map;
 	}
 }
