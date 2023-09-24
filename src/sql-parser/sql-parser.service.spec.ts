@@ -5,10 +5,18 @@ import { SqlParserService } from "./sql-parser.service";
 
 describe("SqlParserService", () => {
 	let service: SqlParserService;
+	let mockHashService: Partial<HashService>;
 
 	beforeEach(async () => {
+		mockHashService = {
+			hash: jest.fn().mockImplementation((value: string) => `hashed_${value}`),
+		};
+
 		const module: TestingModule = await Test.createTestingModule({
-			providers: [SqlParserService, HashService],
+			providers: [
+				SqlParserService,
+				{ provide: HashService, useValue: mockHashService },
+			],
 		}).compile();
 
 		service = module.get<SqlParserService>(SqlParserService);
@@ -63,7 +71,7 @@ describe("SqlParserService", () => {
 
 			columns.forEach((column) => {
 				expect(columnsMap).toHaveProperty(column);
-				expect(columnsMap[column]).not.toBe(column);
+				expect(columnsMap[column]).toBe(`hashed_${column}`);
 			});
 		});
 	});

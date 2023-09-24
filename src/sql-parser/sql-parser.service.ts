@@ -30,7 +30,7 @@ export class SqlParserService {
 		}
 	}
 
-	async hashColumns(columns: string[]) {
+	async hashColumns(columns: string[]): Promise<HashedColumn> {
 		const map = {};
 
 		for (const column of columns) {
