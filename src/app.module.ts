@@ -3,10 +3,11 @@ import { Module } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { HashModule } from "./hash/hash.module";
+import { PrismaModule } from "./prisma/prisma.module";
 import { SqlParserModule } from "./sql-parser/sql-parser.module";
 
 @Module({
-	imports: [SqlParserModule, HashModule],
+	imports: [SqlParserModule, HashModule, PrismaModule],
 	controllers: [AppController],
 	providers: [AppService],
 })
