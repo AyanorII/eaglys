@@ -1,4 +1,5 @@
 import { Test, TestingModule } from "@nestjs/testing";
+import { Parser } from "node-sql-parser";
 
 import { HashService } from "../hash/hash.service";
 import { SqlParserService } from "./sql-parser.service";
@@ -66,13 +67,44 @@ describe("SqlParserService", () => {
 
 	describe("#hashColumns", () => {
 		it("should hash a list of columns", async () => {
-			const columns = ["id", "name", "birthday"];
+			const columns = ["id", "name", "birthday", "(.*)"];
 			const columnsMap = await service.hashColumns(columns);
 
-			columns.forEach((column) => {
-				expect(columnsMap).toHaveProperty(column);
-				expect(columnsMap[column]).toBe(`hashed_${column}`);
-			});
+			const expected = {
+				id: "hashed_id",
+				name: "hashed_name",
+				birthday: "hashed_birthday",
+				"*": "hashed_*",
+			};
+
+			expect(columnsMap).toMatchObject(expected);
+		});
+	});
+
+	describe("#replaceColumnValues", () => {
+		it("should replace the column values in the AST with the hashed values", async () => {
+			const parser = new Parser();
+
+			const queries = [
+				"SELECT id, name FROM users WHERE id = 5;",
+				"UPDATE users SET name = 'John Doe' WHERE id = 5;",
+				"DELETE FROM users WHERE id = 5;",
+				"INSERT INTO users (name) VALUES ('John Doe');",
+			];
+
+			for (const query of queries) {
+				const ast = parser.astify(query);
+				const columns = service.extractColumns(query);
+				const hashedColumnsMap = await service.hashColumns(columns);
+
+				const newAst = service.replaceColumnValues(ast, hashedColumnsMap);
+				const queryWithHashedColumns = parser.sqlify(newAst);
+				const hashedColumnsInQuery = service.extractColumns(
+					queryWithHashedColumns
+				);
+
+				expect(hashedColumnsInQuery).toEqual(Object.values(hashedColumnsMap));
+			}
 		});
 	});
 });
