@@ -12,6 +12,14 @@ export class SqlParserService {
 		private readonly parser: Parser
 	) {}
 
+	parse(query: string): AST | AST[] {
+		return this.parser.astify(query);
+	}
+
+	sqlify(ast: AST | AST[]): string {
+		return this.parser.sqlify(ast);
+	}
+
 	extractColumns(query: string): string[] {
 		if (!query.trim())
 			throw new BadRequestException("Please provide a SQL query.");

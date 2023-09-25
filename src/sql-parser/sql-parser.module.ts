@@ -15,5 +15,6 @@ import { SqlParserService } from "./sql-parser.service";
 			useClass: Parser,
 		},
 	],
+	exports: [SqlParserService],
 })
 export class SqlParserModule {}
