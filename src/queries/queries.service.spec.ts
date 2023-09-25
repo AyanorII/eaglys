@@ -1,4 +1,5 @@
 import { Test, TestingModule } from "@nestjs/testing";
+import { Query } from "@prisma/client";
 import { Parser } from "node-sql-parser";
 
 import { HashService } from "../hash/hash.service";
@@ -8,8 +9,39 @@ import { QueriesService } from "./queries.service";
 
 describe("QueriesService", () => {
 	let service: QueriesService;
+	let queries: Query[];
 
 	beforeEach(async () => {
+		queries = [
+			{
+				id: 1,
+				original: "SELECT id, name FROM users WHERE id = 1",
+				hashed:
+					"SELECT `hashed_id`, `hashed_name` FROM `users` WHERE `hashed_id` = 1",
+				columns: {
+					id: "hashed_id",
+					name: "hashed_name",
+				},
+			},
+			{
+				id: 2,
+				original: "UPDATE users SET name = 'John Doe' WHERE id = 5;",
+				hashed:
+					"UPDATE users SET `hashed_name` = 'John Doe' WHERE `hashed_id` = 5;",
+				columns: {
+					id: "hashed_id",
+					name: "hashed_name",
+				},
+			},
+		];
+
+		const prismaMock = {
+			query: {
+				create: jest.fn().mockResolvedValue(queries[0]),
+				findMany: jest.fn().mockResolvedValue(queries),
+			},
+		};
+
 		const module: TestingModule = await Test.createTestingModule({
 			providers: [
 				QueriesService,
@@ -27,6 +59,10 @@ describe("QueriesService", () => {
 					provide: Parser,
 					useClass: Parser,
 				},
+				{
+					provide: PrismaService,
+					useValue: prismaMock,
+				},
 			],
 		}).compile();
 
@@ -42,15 +78,15 @@ describe("QueriesService", () => {
 			const query = "SELECT id, name FROM users WHERE id = 1";
 			const newQuery = await service.create({ query });
 
-			expect(newQuery).toHaveProperty("id");
-			expect(newQuery.original).toEqual(query);
-			expect(newQuery.hashed).toEqual(
-				"SELECT `hashed_id`, `hashed_name` FROM `users` WHERE `hashed_id` = 1"
-			);
-			expect(newQuery.columns).toMatchObject({
-				id: "hashed_id",
-				name: "hashed_name",
-			});
+			expect(newQuery).toMatchObject(queries[0]);
+		});
+	});
+
+	describe("#findAll", () => {
+		it("should return all queries", async () => {
+			const allQueries = await service.findAll();
+
+			expect(allQueries).toEqual(queries);
 		});
 	});
 });
