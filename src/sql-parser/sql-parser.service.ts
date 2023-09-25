@@ -7,11 +7,10 @@ import { HashedColumn } from "./types";
 
 @Injectable()
 export class SqlParserService {
-	private parser: Parser;
-
-	constructor(private readonly hashService: HashService) {
-		this.parser = new Parser();
-	}
+	constructor(
+		private readonly hashService: HashService,
+		private readonly parser: Parser
+	) {}
 
 	extractColumns(query: string): string[] {
 		if (!query.trim())

@@ -16,6 +16,7 @@ describe("SqlParserService", () => {
 		const module: TestingModule = await Test.createTestingModule({
 			providers: [
 				SqlParserService,
+				{ provide: Parser, useClass: Parser },
 				{ provide: HashService, useValue: mockHashService },
 			],
 		}).compile();
