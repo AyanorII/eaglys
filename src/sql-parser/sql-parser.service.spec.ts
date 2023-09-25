@@ -90,6 +90,10 @@ describe("SqlParserService", () => {
 				"UPDATE users SET name = 'John Doe' WHERE id = 5;",
 				"DELETE FROM users WHERE id = 5;",
 				"INSERT INTO users (name) VALUES ('John Doe');",
+				"ALTER TABLE users ADD COLUMN phone VARCHAR(15);",
+				"CREATE TABLE users (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50) NOT NULL, email VARCHAR(100) NOT NULL UNIQUE);",
+				"ALTER TABLE users ADD COLUMN phone VARCHAR(15);",
+				"DROP TABLE users;",
 			];
 
 			for (const query of queries) {
