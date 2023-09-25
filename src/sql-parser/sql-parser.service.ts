@@ -79,7 +79,10 @@ export class SqlParserService {
 			const astCopy = { ...ast };
 
 			for (const [key, value] of Object.entries(astCopy)) {
-				if (key === "column") {
+				// When the AST type is "create", the "column" key is an object which contains
+				// another "column" property with the column name.
+				// If the "column" key is a string, then it's the actual column name.
+				if (key === "column" && typeof value === "string") {
 					const hashedColumn = hashedColumnsMap[value as keyof HashedColumn];
 					astCopy[key] = hashedColumn;
 				} else if (ast.type === "insert") {
