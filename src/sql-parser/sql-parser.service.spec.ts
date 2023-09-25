@@ -107,4 +107,15 @@ describe("SqlParserService", () => {
 			}
 		});
 	});
+
+	describe("#buildQueryWithHashedColumns", () => {
+		it("should build a query with hashed columns", async () => {
+			const query = "SELECT id, name FROM users WHERE id = 5;";
+			const hashedQuery = await service.buildQueryWithHashedColumns(query);
+
+			expect(hashedQuery).toBe(
+				"SELECT `hashed_id`, `hashed_name` FROM `users` WHERE `hashed_id` = 5"
+			);
+		});
+	});
 });

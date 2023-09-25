@@ -9,9 +9,8 @@ export class SqlParserController {
 
 	@Post()
 	extractColumns(@Body() createSqlParserDto: CreateSqlParserDto) {
-		const columns = this.sqlParserService.extractColumns(
+		return this.sqlParserService.buildQueryWithHashedColumns(
 			createSqlParserDto.query
 		);
-		return this.sqlParserService.hashColumns(columns);
 	}
 }

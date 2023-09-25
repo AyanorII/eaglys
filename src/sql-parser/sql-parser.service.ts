@@ -45,6 +45,19 @@ export class SqlParserService {
 		return map;
 	}
 
+	async buildQueryWithHashedColumns(query: string) {
+		const columns = this.extractColumns(query);
+		const hashedColumns = await this.hashColumns(columns);
+		const astArray = this.parser.astify(query) as AST[];
+		const astWithHashedColumns = this.replaceColumnValues(
+			astArray,
+			hashedColumns
+		);
+
+		const hashedQuery = this.parser.sqlify(astWithHashedColumns);
+		return hashedQuery;
+	}
+
 	/**
 	 * Recursively replace the column values in the AST with the hashed values.
 	 * @param ast
