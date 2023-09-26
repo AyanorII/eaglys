@@ -15,4 +15,7 @@ model Query {
   original  String
   hashed    String
   columns   Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
