@@ -34,4 +34,6 @@ COPY . .
 
 COPY --from=development /app/dist ./dist
 
+EXPOSE 8000
+
 CMD [ "yarn", "start:prod" ]
