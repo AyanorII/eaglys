@@ -14,6 +14,6 @@ export class QueriesController {
 
 	@Get()
 	findAll() {
-		return this.queriesService.findAll();
+		return this.queriesService.findAll({ orderBy: { createdAt: "desc" } });
 	}
 }

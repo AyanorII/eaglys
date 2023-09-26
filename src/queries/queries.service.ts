@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Query } from "@prisma/client";
+import { Prisma, Query } from "@prisma/client";
 
 import { PrismaService } from "../prisma/prisma.service";
 import { SqlParserService } from "../sql-parser/sql-parser.service";
@@ -36,7 +36,7 @@ export class QueriesService {
 		return newQuery;
 	}
 
-	async findAll(): Promise<Query[]> {
-		return this.prisma.query.findMany({});
+	async findAll(options?: Prisma.QueryFindManyArgs): Promise<Query[]> {
+		return this.prisma.query.findMany(options);
 	}
 }
