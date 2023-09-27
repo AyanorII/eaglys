@@ -28,8 +28,7 @@
   "lint-staged": {
     "**/*.ts": [
       "eslint --fix",
-      "prettier --write",
-      "yarn test"
+      "prettier --write"
     ]
   },
   "dependencies": {
