@@ -29,33 +29,20 @@
 ## Installation
 
 ```bash
-$ yarn install
+$ git clone git@github.com:AyanorII/eaglys.git && cd eaglys
 ```
 
 ## Running the app
 
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+$ docker compose up
 ```
 
 ## Test
 
 ```bash
 # unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+$ docker exec -it api /bin/sh -c "yarn test"
 ```
 
 ## Support
