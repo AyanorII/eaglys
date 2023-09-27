@@ -22,6 +22,8 @@ describe("QueriesService", () => {
 					id: "hashed_id",
 					name: "hashed_name",
 				},
+				createdAt: new Date(),
+				updatedAt: new Date(),
 			},
 			{
 				id: 2,
@@ -32,6 +34,8 @@ describe("QueriesService", () => {
 					id: "hashed_id",
 					name: "hashed_name",
 				},
+				createdAt: new Date(),
+				updatedAt: new Date(),
 			},
 		];
 

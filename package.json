@@ -21,13 +21,15 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "pre-push": "eslint --fix . && prettier --write '**/*.ts' && yarn test && yarn build"
     }
   },
   "lint-staged": {
     "**/*.ts": [
       "eslint --fix",
-      "prettier --write"
+      "prettier --write",
+      "yarn test"
     ]
   },
   "dependencies": {
