@@ -34,6 +34,8 @@ COPY . .
 
 COPY --from=development /app/dist ./dist
 
+RUN npx prisma generate
+
 EXPOSE 8000
 
 CMD [ "yarn", "start:prod" ]
