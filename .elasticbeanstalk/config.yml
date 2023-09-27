@@ -1,12 +1,12 @@
 branch-defaults:
-  master:
-    environment: prod
+  main:
+    environment: production
 environment-defaults:
-  prod:
+  production:
     branch: null
     repository: null
 global:
-  application_name: eaglys_api
+  application_name: eaglys-api
   default_ec2_keyname: eaglys_key_pair
   default_platform: Docker running on 64bit Amazon Linux 2023
   default_region: ap-northeast-1
