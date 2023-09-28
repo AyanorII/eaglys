@@ -40,10 +40,14 @@ $ cp .env.example .env
 $ docker compose --profile development up
 ```
 
+## Run migrations
+```bash
+$ docker exec -it api -c "npx prisma migrate dev"
+```
+
 ## Test
 
 ```bash
-# unit tests
 $ docker exec -it api /bin/sh -c "yarn test"
 ```
 
