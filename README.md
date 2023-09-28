@@ -29,13 +29,15 @@
 ## Installation
 
 ```bash
-$ git clone git@github.com:AyanorII/eaglys.git && cd eaglys
+$ git clone git@github.com:AyanorII/eaglys.git
+$ cd eaglys
+$ cp .env.example .env
 ```
 
 ## Running the app
 
 ```bash
-$ docker compose up
+$ docker compose --profile development up
 ```
 
 ## Test
@@ -45,6 +47,10 @@ $ docker compose up
 $ docker exec -it api /bin/sh -c "yarn test"
 ```
 
+## Deploy on AWS Elastic Beanstalk
+```bash
+$ eb deploy production
+```
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
